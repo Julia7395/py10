@@ -3,21 +3,20 @@
 # Ваша задача перевести его в one hot вид. 
 # Сможете ли вы это сделать без get_dummies?
 
-import pandas as pd 
-import numpy as np 
 import random
- 
+
+# Исходные данные
 lst = ['robot'] * 10
 lst += ['human'] * 10
 random.shuffle(lst)
-data = pd.DataFrame({'whoAmI': lst})
-print(data)
- 
-print('')
 
-data['tmp'] = 1
-data.set_index([data.index, 'whoAmI'], inplace=True)
-data = data.unstack(level=-1, fill_value = 0).astype(int)
-data.columns = data.columns.droplevel()
-data.columns.name = None
-print(data)
+# Находим уникальные значения и создаем словарь для кодирования
+unique_values = list(set(lst))
+encoding = {value: [1 if value == val else 0 for val in unique_values] for value in unique_values}
+
+# Преобразование в one hot encoding
+one_hot_encoded = [encoding[value] for value in lst]
+
+# Вывод результатов
+for value, encoded in zip(lst[:5], one_hot_encoded[:5]):
+    print(f'{value}: {encoded}')
